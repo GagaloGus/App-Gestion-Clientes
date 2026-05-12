@@ -1,0 +1,26 @@
+@use '../../styles/variables' as *;
+
+.header {
+    color: white;
+    background: $banner-gradient-header;
+
+    >h1 {
+        font-size: 3rem;
+        margin: 0;
+    }
+}
+
+.contenedor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    text-align: center;
+
+    >button {
+        transition: transform 0.1s;
+        &:hover {
+            transform: translateY(-3px);
+        }
+    }
+}

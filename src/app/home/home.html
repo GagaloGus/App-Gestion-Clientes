@@ -1,0 +1,31 @@
+<div>
+    <div class="header p-4">
+        <h1>Gestión de clientes</h1>
+    </div>
+    <div class="main p-4">
+        <h3>Búsqueda de clientes por letra</h3>
+        <div class="my-4 card">
+            <div class="card-body">
+                <div class="contenedor-grid p-0">
+                    @for (letra of ABECEDARIO; track letra) {
+                    <button class="btn btn-primary fs-4 px-3 fw-bold">{{letra}}</button>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex">
+            <app-tabla class="w-75 pe-3"
+                [columnas]="columnasClientes"
+                [datos]="clientesFiltrados()"
+                [cargando]="!finishedLoading()"
+                [clickFila]="true"
+                [hayAcciones]="false"
+                [columnaOrden]="'nombre'">
+            </app-tabla>
+            <div class="w-25">
+
+            </div>
+        </div>
+    </div>
+</div>

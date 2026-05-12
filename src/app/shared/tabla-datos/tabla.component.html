@@ -1,0 +1,109 @@
+<div class="table-wrapper">
+  <div class="table-responsive">
+    <table class="table tabla-datos mb-0">
+
+      <thead>
+        <tr>
+          @for (col of columnas; track col.field) {
+            <th
+              [class.th-sortable]="col.sortable"
+              [class.th-active]="sortCol() === col.field"
+              (click)="col.sortable ? toggleSort(col.field) : null">
+              {{ col.header }}
+              @if (col.sortable) {
+                <span class="sort-icon">{{ sortIcon(col.field) }}</span>
+              }
+            </th>
+          }
+          @if (acciones.length > 0 && hayAcciones) {
+            <th class="text-center">Acciones</th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (cargando) {
+          <tr>
+            <td [attr.colspan]="columnas.length + 1" class="loading-icono pt-4">
+                <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="30" cy="30" r="22" fill="none" stroke="#dee2e6" stroke-width="4" stroke-linecap="round" />
+                    <g>
+                        <circle cx="30" cy="30" r="22" fill="none" stroke="#0d6efd" stroke-width="4" stroke-linecap="round" stroke-dasharray="35 105" />
+                    </g>
+                </svg>
+                <p class="mt-2">Obteniendo datos...</p>
+            </td>
+          </tr>
+        } @else if (datosSorted.length === 0) {
+          <tr>
+            <td [attr.colspan]="columnas.length + 1" class="text-center py-4 text-muted">
+              {{ mensajeVacio }}
+            </td>
+          </tr>
+        } @else {
+          @for (row of datosSorted; track row.id) {
+            <tr
+              [class.fila-clickable]="clickFila"
+              (click)="onFilaClick(row)">
+
+              @for (col of columnas; track col.field) {
+                <td>
+                  @if (cellTemplates[col.field]) {
+                    <!-- Template personalizado para esta celda -->
+                    <ng-container
+                      [ngTemplateOutlet]="cellTemplates[col.field]"
+                      [ngTemplateOutletContext]="{ $implicit: row }">
+                    </ng-container>
+                  } @else {
+                    {{ row[col.field] ?? '—' }}
+                  }
+                </td>
+              }
+
+              @if (acciones.length > 0 && hayAcciones) {
+                <td class="btn-accion-col" (click)="$event.stopPropagation()">
+                  @for (accion of acciones; track accion.tipo) {
+                    @if (!accion.visible || accion.visible(row)) {
+
+                      @if (accion.tipo === 'detalles') {
+                        <button class="btn btn-sm btn-accion-white" title="Ver detalles"
+                          (click)="detallesClick.emit(row)">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9 4.46C9.91 4.17 10.91 4 12 4c4.18 0 7.03 2.5 8.73 4.7.85 1.1 1.27 1.66 1.27 3.3s-.42 2.19-1.27 3.3C19.03 17.5 16.18 20 12 20s-7.03-2.5-8.73-4.7C2.42 14.19 2 13.64 2 12s.42-2.19 1.27-3.3C3.76 8.08 4.33 7.43 5 6.82" stroke-linecap="round"/>
+                            <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                          </svg>
+                        </button>
+                      }
+
+                      @if (accion.tipo === 'editar') {
+                        <button class="btn btn-sm btn-accion-edit" title="Editar"
+                          (click)="editarClick.emit(row)">
+                          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                          </svg>
+                        </button>
+                      }
+
+                      @if (accion.tipo === 'eliminar') {
+                        <button class="btn btn-sm btn-accion-delete" title="Eliminar"
+                          (click)="eliminarClick.emit(row)">
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                          </svg>
+                        </button>
+                      }
+
+                    }
+                  }
+                </td>
+              }
+
+            </tr>
+          }
+        }
+      </tbody>
+
+    </table>
+  </div>
+</div>
