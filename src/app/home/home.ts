@@ -30,6 +30,14 @@ export class Home implements OnInit {
 
   errorMsg = signal('');
 
+  filtroLetra(letra:string){
+    console.log(`Filtrar por letra -> ${letra}`)
+    this.clientesFiltrados.set(
+      this.clientes().filter(c => c.nombre[0].toLowerCase() == letra.toLowerCase())
+    )
+  }
+
+
   ngOnInit(): void {
     this.cargarTodo()
   }
@@ -42,7 +50,7 @@ export class Home implements OnInit {
 
   async cargarClientes(){
     try {
-      const data = await this.supabaseService.getAll(Tablas.CLIENTES);
+      const data = await this.supabaseService.getAll(Tablas.CLIENTES, "nombre");
       this.clientes.set(data.map((v: any) => new Cliente(v)));
       this.clientesFiltrados.set(this.clientes())
     } catch (err: any) {

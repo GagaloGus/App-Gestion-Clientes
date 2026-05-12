@@ -17,11 +17,11 @@ export class SupabaseService {
     );
   }
 
-  async getAll(table: Tablas) {
+  async getAll(table: Tablas, order:string = 'id') {
     const { data, error } = await this.supabase
       .from(table)
       .select('*')
-      .order("id");
+      .order(order);
 
     if (error) {
       throw error;

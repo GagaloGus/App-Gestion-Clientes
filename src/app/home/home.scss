@@ -1,5 +1,10 @@
 @use '../../styles/variables' as *;
 
+.page-container{
+    height: 100vh;
+    background: $surface-2;
+}
+
 .header {
     color: white;
     background: $banner-gradient-header;
@@ -10,9 +15,26 @@
     }
 }
 
+.main{
+    height: 75vh;
+}
+
+.sect-izq{
+    width: 70%;
+    padding-right: 15px;
+}
+
+.sect-der{
+    width: 30%;
+
+    >div{
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+}
+
 .contenedor-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
     gap: 20px;
     padding: 20px;
     text-align: center;

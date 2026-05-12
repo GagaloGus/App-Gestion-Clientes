@@ -1,31 +1,37 @@
-<div>
+<div class="page-container">
     <div class="header p-4">
         <h1>Gestión de clientes</h1>
     </div>
-    <div class="main p-4">
-        <h3>Búsqueda de clientes por letra</h3>
-        <div class="my-4 card">
-            <div class="card-body">
+    <div class="main p-4 px-5 d-flex gap-3">
+        <section class="sect-izq">
+            <h3>Búsqueda de clientes por letra</h3>
+            <hr>
+            <div class="my-4 px-3">
                 <div class="contenedor-grid p-0">
                     @for (letra of ABECEDARIO; track letra) {
-                    <button class="btn btn-primary fs-4 px-3 fw-bold">{{letra}}</button>
+                    <button class="btn btn-primary fs-4 px-3 fw-bold" (click)="filtroLetra(letra)">
+                        {{letra}}
+                    </button>
                     }
                 </div>
             </div>
-        </div>
-
-        <div class="d-flex">
-            <app-tabla class="w-75 pe-3"
-                [columnas]="columnasClientes"
-                [datos]="clientesFiltrados()"
-                [cargando]="!finishedLoading()"
-                [clickFila]="true"
-                [hayAcciones]="false"
-                [columnaOrden]="'nombre'">
-            </app-tabla>
-            <div class="w-25">
-
+            <hr>
+            <div>
+                <app-tabla
+                    [columnas]="columnasClientes"
+                    [datos]="clientesFiltrados()"
+                    [cargando]="!finishedLoading()"
+                    [clickFila]="true"
+                    [hayAcciones]="false">
+                </app-tabla>
             </div>
-        </div>
+        </section>
+        <section class="sect-der pt-3">
+            <div class="card h-100">
+                <div class="card-header"></div>
+                <div class="card-body"></div>
+                <div class="card-footer"></div>
+            </div>
+        </section>
     </div>
 </div>
