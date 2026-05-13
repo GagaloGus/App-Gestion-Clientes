@@ -1,11 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { Cliente, Tablas } from '../database/tablas.supabase';
-import { SupabaseService } from '../database/supabase.service';
-import { TablaColumna, TablaDatosComponent } from '../shared/tabla-datos/tabla.component';
+import { NgClass } from "@angular/common";
+import { Cliente, Sesion, Tablas } from '../../database/tablas.supabase';
+import { SupabaseService } from '../../database/supabase.service';
+import { TablaColumna, TablaDatosComponent } from '../../tabla-datos/tabla.component';
 
 @Component({
   selector: 'app-home',
-  imports: [TablaDatosComponent],
+  imports: [TablaDatosComponent, NgClass],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -13,28 +14,45 @@ export class Home implements OnInit {
 
   constructor(private supabaseService: SupabaseService){}
 
-  ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
-  // -- Signals
-  finishedLoading = signal(false);
+  // -- CLIENTE
   clientes = signal<Cliente[]>([])
   clientesFiltrados = signal<Cliente[]>([])
-
+  clienteSeleccionado = signal<Cliente|null>(null)
+  
   columnasClientes: TablaColumna[] = [
-    { field: 'id', header: 'ID Cliente', sortable: true },
-    { field: 'nombre', header: 'Nombre', sortable: true },
-    { field: 'apellido1', header: '1er apellido', sortable: true },
-    { field: 'apellido2', header: '2do apellido', sortable: true },
-    { field: 'email', header: 'Email', sortable: true },
-    { field: 'telefono', header: 'Teléfono', sortable: true },
+    { field: 'id', header: 'ID Cliente' },
+    { field: 'nombre', header: 'Nombre' },
+    { field: 'apellido1', header: '1er apellido' },
+    { field: 'apellido2', header: '2do apellido' },
+    { field: 'telefono', header: 'Teléfono' },
+    { field: 'fecha_nacimiento', header: 'Fecha de Nacimiento' },
   ]
+  
+  // -- SESIONES
+  sesiones = signal<Sesion[]>([])
+  sesionesFiltradas = signal<Sesion[]>([])
 
+  columnasSesiones: TablaColumna[] = [
+    {field: 'tratamiento', header:'Tratamiento', width:50},
+    {field: 'notas', header:'Notas', width:50},
+  ]
+  
+  // -- OTRAS
+  ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+  finishedLoading = signal(false);
+  finishedLoading_Sesiones = signal(false);
   errorMsg = signal('');
-
-  filtroLetra(letra:string){
-    console.log(`Filtrar por letra -> ${letra}`)
+  filtro_letra = "";
+  
+  async filtroLetra(letra:string){
+    this.finishedLoading.set(false)
+    this.filtro_letra = letra
+    console.log(`Filtrar por letra -> ${letra} : ${this.filtro_letra} : ${letra == this.filtro_letra}`)
     this.clientesFiltrados.set(
       this.clientes().filter(c => c.nombre[0].toLowerCase() == letra.toLowerCase())
     )
+    await delay(50)
+    this.finishedLoading.set(true)
   }
 
 
@@ -44,7 +62,12 @@ export class Home implements OnInit {
 
   async cargarTodo(){
     this.finishedLoading.set(false)
+    this.finishedLoading_Sesiones.set(false)
+
     await this.cargarClientes()
+    await this.cargarSesiones()
+    this.finishedLoading_Sesiones.set(true)
+
     this.finishedLoading.set(true)
   }
 
@@ -58,4 +81,24 @@ export class Home implements OnInit {
       console.error('Error al cargar clientes:', err.message);
     }
   }
+
+  async cargarSesiones(){
+    try {
+      const data = await this.supabaseService.getAll(Tablas.SESIONES);
+      this.sesiones.set(data.map((v: any) => new Sesion(v)));
+      this.sesionesFiltradas.set(this.sesiones())
+    } catch (err: any) {
+      this.errorMsg.set('Error al cargar sesiones: ' + err.message);
+      console.error('Error al cargar sesiones:', err.message);
+    }
+  }
+
+}
+
+/**
+ * En funciones ASYNC detiene durante x milisegundos el flujo de la funcion
+ * @param ms milisegundos
+ */
+function delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
 }

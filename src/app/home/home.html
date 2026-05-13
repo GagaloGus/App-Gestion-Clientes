@@ -9,7 +9,8 @@
             <div class="my-4 px-3">
                 <div class="contenedor-grid p-0">
                     @for (letra of ABECEDARIO; track letra) {
-                    <button class="btn btn-primary fs-4 px-3 fw-bold" (click)="filtroLetra(letra)">
+                    <button class="btn btn-letra fs-4 px-3 fw-bold"
+                        [ngClass]="{'btn-letra-activa': filtro_letra == letra}" (click)="filtroLetra(letra)">
                         {{letra}}
                     </button>
                     }
@@ -17,20 +18,43 @@
             </div>
             <hr>
             <div>
-                <app-tabla
-                    [columnas]="columnasClientes"
-                    [datos]="clientesFiltrados()"
+                <app-tabla 
+                    [columnas]="columnasClientes" 
+                    [datos]="clientesFiltrados()" 
                     [cargando]="!finishedLoading()"
-                    [clickFila]="true"
+                    [clickFila]="true" 
                     [hayAcciones]="false">
                 </app-tabla>
             </div>
         </section>
         <section class="sect-der pt-3">
             <div class="card h-100">
+                @if (clienteSeleccionado()) {
                 <div class="card-header"></div>
                 <div class="card-body"></div>
                 <div class="card-footer"></div>
+                }
+                @else {
+                    <div class="card-header py-3">
+                        <h2 class="m-0">Marta beas</h2>
+                    </div>
+                    <div class="card-body">
+                        <h5>Telefono: 654651363</h5>
+                        <h5>Fecha de nacimiento: 2004-02-65</h5>
+                        <h5>Sesiones hechas: 16</h5>
+                        <hr>
+                        <div class="card">
+                            <div class="card-body px-0">
+                                <app-tabla 
+                                    [columnas]="columnasSesiones" 
+                                    [datos]="sesionesFiltradas()" 
+                                    [cargando]="!finishedLoading_Sesiones()">
+                                </app-tabla>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer"></div>
+                }
             </div>
         </section>
     </div>

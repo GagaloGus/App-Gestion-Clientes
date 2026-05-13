@@ -13,6 +13,8 @@ export interface TablaColumna {
   header: string;      // texto del header
   sortable?: boolean;  // se puede ordenar?
   template?: string;   // nombre de template personalizado (opcional)
+  wrap?:boolean;
+  width?:number;
 }
 
 export interface TablaAccion {
@@ -41,7 +43,7 @@ export class TablaDatosComponent implements OnInit {
   @Input() cargando = false;
   @Input() mensajeVacio = 'No hay datos';
   @Input() clickFila = false; // activa onclick en el tr
-  @Input() hayAcciones = true;
+  @Input() hayAcciones = false;
   @Input() columnaOrden: string | null = null;
 
   // Templates personalizados por nombre de campo

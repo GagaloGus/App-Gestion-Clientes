@@ -20,12 +20,12 @@
 }
 
 .sect-izq{
-    width: 70%;
+    width: 65%;
     padding-right: 15px;
 }
 
 .sect-der{
-    width: 30%;
+    width: 35%;
 
     >div{
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
@@ -38,11 +38,28 @@
     gap: 20px;
     padding: 20px;
     text-align: center;
+}
 
-    >button {
-        transition: transform 0.1s;
-        &:hover {
-            transform: translateY(-3px);
-        }
+.btn-letra{
+    background: $primary;
+    color: white;
+    transition: transform 0.1s;
+    
+    &:hover{
+        transform: translateY(-3px);
+        background: $primary-hover;
+    }
+    
+    &:active{
+        background: $primary-2;
+        color: white;
+    }
+}
+
+.btn-letra-activa{
+    background: $success !important;
+
+    &:hover{
+        background: $success-2 !important;
     }
 }

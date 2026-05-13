@@ -1,7 +1,7 @@
-@use '../../../styles/variables' as *;
+@use '../styles/variables' as *;
 
 .tabla-datos {
-  min-width: 960px; // fuerza el scroll cuando la pantalla es más pequeña
+  min-width: fit-content; // fuerza el scroll cuando la pantalla es más pequeña
   width: 100%;
 
   thead tr {
@@ -31,7 +31,6 @@
   tbody td {
     transition: all ease 0.15s;
     padding: 0.75rem 1rem;
-    vertical-align: middle;
     border: none;
     color: $text;
     text-wrap: nowrap;
@@ -41,7 +40,6 @@
     display: flex;
     gap: 0.4rem;
     justify-content: center;
-    text-wrap: nowrap;
     text-align: center;
   }
 }
