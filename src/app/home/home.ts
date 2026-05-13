@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { NgClass } from "@angular/common";
 import { Cliente, Sesion, Tablas } from '../../database/tablas.supabase';
 import { SupabaseService } from '../../database/supabase.service';
@@ -18,38 +18,54 @@ export class Home implements OnInit {
   clientes = signal<Cliente[]>([])
   clientesFiltrados = signal<Cliente[]>([])
   clienteSeleccionado = signal<Cliente|null>(null)
-  
+
   columnasClientes: TablaColumna[] = [
     { field: 'nombre', header: 'Nombre' },
     { field: 'apellido1', header: '1er apellido' },
     { field: 'apellido2', header: '2do apellido' },
     { field: 'telefono', header: 'Teléfono' },
     { field: 'fecha_nacimiento', header: 'Fecha de Nacimiento' },
-    
+
   ]
-  
+
   // -- SESIONES
   sesiones = signal<Sesion[]>([])
-  sesionesFiltradas = signal<Sesion[]>([])
 
   columnasSesiones: TablaColumna[] = [
     {field: 'tratamiento', header:'Tratamiento', width:50},
     {field: 'notas', header:'Notas', width:50},
   ]
-  
+
+  sesionesFiltradas = computed(()=>{
+    if(!this.clienteSeleccionado())
+      return this.sesiones()
+    else{
+      return this.sesiones().filter(s => s.id_cliente == this.clienteSeleccionado()?.id)
+    }
+  })
+
   // -- OTRAS
   ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
   finishedLoading = signal(false);
   finishedLoading_Sesiones = signal(false);
   errorMsg = signal('');
   filtro_letra = "";
-  
-  async filtroLetra(letra:string){
+
+  async cambiarFiltroLetra(letra:string){
     this.finishedLoading.set(false)
-    this.filtro_letra = letra
+    if(this.filtro_letra == letra)
+      this.filtro_letra = ''
+    else
+      this.filtro_letra = letra
+
     console.log(`Filtrar por letra -> ${letra} : ${this.filtro_letra} : ${letra == this.filtro_letra}`)
-    this.clientesFiltrados.set(
-      this.clientes().filter(c => c.nombre[0].toLowerCase() == letra.toLowerCase())
+    this.clientesFiltrados.update(()=>{
+      if (this.filtro_letra != '')
+        return this.clientes().filter(c => c.nombre[0].toLowerCase() == letra.toLowerCase())
+      else
+        return this.clientes()
+    }
+
     )
     await delay(50)
     this.finishedLoading.set(true)
@@ -86,13 +102,11 @@ export class Home implements OnInit {
     try {
       const data = await this.supabaseService.getAll(Tablas.SESIONES);
       this.sesiones.set(data.map((v: any) => new Sesion(v)));
-      this.sesionesFiltradas.set(this.sesiones())
     } catch (err: any) {
       this.errorMsg.set('Error al cargar sesiones: ' + err.message);
       console.error('Error al cargar sesiones:', err.message);
     }
   }
-
 }
 
 /**

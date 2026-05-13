@@ -6,7 +6,6 @@ export const routes: Routes = [
 
     // Ruta vacia
     {path: '', redirectTo: '/home', pathMatch: 'full'},
-
     // Ruta incorrecta
     {path: '**', redirectTo: '/home', pathMatch: 'full'},
 ];

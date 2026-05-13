@@ -49,6 +49,7 @@ export class TablaDatosComponent implements OnInit {
   // Templates personalizados por nombre de campo
   @Input() cellTemplates: Record<string, TemplateRef<any>> = {};
 
+  
   @Output() filaClick     = new EventEmitter<any>();
   @Output() detallesClick = new EventEmitter<any>();
   @Output() editarClick   = new EventEmitter<any>();

@@ -1,7 +1,7 @@
 @use '../../styles/variables' as *;
 
 .page-container{
-    height: 100vh;
+    height: fit-content;
     background: $surface-2;
 }
 
@@ -16,11 +16,12 @@
 }
 
 .main{
-    height: 75vh;
+    height: fit-content;
 }
 
 .sect-izq{
     width: 65%;
+    height: fit-content;
     padding-right: 15px;
 }
 
@@ -34,22 +35,23 @@
 
 .contenedor-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(6%, 1fr));
     gap: 20px;
     padding: 20px;
-    text-align: center;
 }
 
 .btn-letra{
     background: $primary;
+    text-align: center;
+    font-size: 110%;
     color: white;
     transition: transform 0.1s;
-    
+
     &:hover{
         transform: translateY(-3px);
         background: $primary-hover;
     }
-    
+
     &:active{
         background: $primary-2;
         color: white;
