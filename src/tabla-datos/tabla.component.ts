@@ -13,7 +13,7 @@ export interface TablaColumna {
   header: string;      // texto del header
   sortable?: boolean;  // se puede ordenar?
   template?: string;   // nombre de template personalizado (opcional)
-  wrap?:boolean;
+  nowrap?:boolean;
   width?:number;
 }
 

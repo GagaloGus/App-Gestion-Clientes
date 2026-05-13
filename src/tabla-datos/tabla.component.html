@@ -51,7 +51,7 @@
               (click)="onFilaClick(row)">
 
               @for (col of columnas; track col.field) {
-                <td [style.white-space]="col.wrap ? 'normal' : 'nowrap'" [style.width]="col.width ? col.width+'%' : null">
+                <td [style.white-space]="col.nowrap ? 'nowrap' : 'normal'" [style.width]="col.width ? col.width+'%' : null">
                   @if (cellTemplates[col.field]) {
                     <!-- Template personalizado para esta celda -->
                     <ng-container

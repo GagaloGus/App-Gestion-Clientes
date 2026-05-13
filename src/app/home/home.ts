@@ -20,12 +20,12 @@ export class Home implements OnInit {
   clienteSeleccionado = signal<Cliente|null>(null)
   
   columnasClientes: TablaColumna[] = [
-    { field: 'id', header: 'ID Cliente' },
     { field: 'nombre', header: 'Nombre' },
     { field: 'apellido1', header: '1er apellido' },
     { field: 'apellido2', header: '2do apellido' },
     { field: 'telefono', header: 'Teléfono' },
     { field: 'fecha_nacimiento', header: 'Fecha de Nacimiento' },
+    
   ]
   
   // -- SESIONES
