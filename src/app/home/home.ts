@@ -1,19 +1,18 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
 import { NgClass } from "@angular/common";
-import { Cliente, Sesion, Tablas } from '../../database/tablas.supabase';
-import { SupabaseService } from '../../database/supabase.service';
-import { TablaColumna, TablaDatosComponent } from '../../tabla-datos/tabla.component';
+import { CanvasAnimCirculos } from '@shared/canvas/anim-circulos.canvas';
+import { TablaDatosComponent, TablaColumna } from '@shared/tabla-datos/tabla.component';
+import { SupabaseService } from '@database/supabase.service';
+import { Cliente, Sesion, Tablas } from '@database/tablas.supabase';
 
 @Component({
   selector: 'app-home',
-  imports: [TablaDatosComponent, NgClass],
+  imports: [TablaDatosComponent, NgClass, CanvasAnimCirculos],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home implements OnInit {
-
   constructor(private supabaseService: SupabaseService){}
-
   // -- CLIENTE
   clientes = signal<Cliente[]>([])
   clientesFiltrados = signal<Cliente[]>([])
@@ -44,6 +43,7 @@ export class Home implements OnInit {
     }
   })
 
+  
   // -- OTRAS
   ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
   finishedLoading = signal(false);

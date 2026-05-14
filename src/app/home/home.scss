@@ -1,17 +1,38 @@
 @use '../../styles/variables' as *;
 
 .page-container{
+    min-height: 100vh;
     height: fit-content;
     background: $surface-2;
 }
 
 .header {
+    position: relative;
+    overflow: hidden;
+    height: fit-content;
     color: white;
     background: $banner-gradient-header;
+    vertical-align: middle;
 
     >h1 {
         font-size: 3rem;
         margin: 0;
+    }
+}
+
+.logo-header{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: fit-content;
+    height: 100%;
+    margin: 0;
+    padding: 0.5rem;
+    z-index: 999;
+
+    > img{
+        width: 100%;
+        aspect-ratio: 1/1;
     }
 }
 
@@ -25,12 +46,13 @@
     padding-right: 15px;
 }
 
-.sect-der{
+.sect-der {
+    position: sticky;
+    top: 1rem;
+    align-self: flex-start;
+    max-height: calc(100vh - 1rem);
+    overflow-y: auto;
     width: 35%;
-
-    >div{
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    }
 }
 
 .contenedor-grid {
