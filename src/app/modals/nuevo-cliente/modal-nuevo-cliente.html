@@ -1,0 +1,99 @@
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="modal-box">
+
+    <!-- HEADER -->
+    <div class="modal-cabecera">
+      <div class="d-flex gap-2 align-items-center">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path
+            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+        </svg>
+        <h5 class="m-0 fw-bold">Nuevo cliente</h5>
+      </div>
+      <button class="btn-close" (click)="cerrar.emit()"></button>
+    </div>
+
+    <!-- BODY -->
+    <div class="modal-cuerpo">
+
+      <!-- Nombre -->
+      <div class="campo-grupo">
+        <label class="campo-label">Nombre <span class="text-danger">*</span></label>
+        <input class="form-control" [class.is-invalid]="errores['nombre']" type="text" [(ngModel)]="formData.nombre"
+          placeholder="Ej: Laura">
+        @if (errores['nombre']) {
+        <div class="invalid-feedback">{{ errores['nombre'] }}</div>
+        }
+      </div>
+
+      <!-- Apellidos -->
+      <div class="campo-fila">
+        <div class="campo-grupo">
+          <label class="campo-label">1er apellido <span class="text-danger">*</span></label>
+          <input class="form-control" [class.is-invalid]="errores['apellido1']" type="text"
+            [(ngModel)]="formData.apellido1" placeholder="Ej: García">
+          @if (errores['apellido1']) {
+          <div class="invalid-feedback">{{ errores['apellido1'] }}</div>
+          }
+        </div>
+        <div class="campo-grupo">
+          <label class="campo-label">2do apellido</label>
+          <input class="form-control" type="text" [(ngModel)]="formData.apellido2" placeholder="Ej: López">
+        </div>
+      </div>
+
+      <!-- Teléfono y fecha de nacimiento -->
+      <div class="campo-fila">
+        <div class="campo-grupo">
+          <label class="campo-label">Teléfono</label>
+          <input class="form-control" [class.is-invalid]="errores['telefono']" type="tel"
+            [(ngModel)]="formData.telefono" placeholder="Ej: 612345678">
+          @if (errores['telefono']) {
+          <div class="invalid-feedback">{{ errores['telefono'] }}</div>
+          }
+        </div>
+        <div class="campo-grupo">
+          <label class="campo-label">Fecha de nacimiento</label>
+          <input class="form-control" [class.is-invalid]="errores['fecha_nacimiento']" type="date"
+            [(ngModel)]="formData.fecha_nacimiento">
+          @if (errores['fecha_nacimiento']) {
+          <div class="invalid-feedback">{{ errores['fecha_nacimiento'] }}</div>
+          }
+        </div>
+      </div>
+
+
+      <!-- Notas -->
+      <div class="campo-grupo">
+        <label class="campo-label">Notas</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="formData.notas"
+          placeholder="Observaciones, alergias, preferencias..."></textarea>
+      </div>
+
+      <!-- Mensajes de estado -->
+      @if (errorMsg()) {
+      <div class="alert alert-danger py-2 mb-0">{{ errorMsg() }}</div>
+      }
+      @if (successMsg()) {
+      <div class="alert alert-success py-2 mb-0">{{ successMsg() }}</div>
+      }
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-pie">
+      <button class="btn btn-outline-secondary" (click)="cerrar.emit()" [disabled]="enviando()">
+        Cancelar
+      </button>
+      <button class="btn btn-info d-flex align-items-center gap-2" (click)="guardar()" [disabled]="enviando()">
+        @if (enviando()) {
+        <span class="spinner-border spinner-border-sm"></span>
+        Guardando...
+        } @else {
+        Guardar cliente
+        }
+      </button>
+    </div>
+
+  </div>
+</div>

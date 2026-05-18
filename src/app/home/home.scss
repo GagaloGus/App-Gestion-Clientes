@@ -1,7 +1,9 @@
 @use '../../styles/variables' as *;
 
-.page-container{
+.page-container {
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     height: fit-content;
     background: $surface-2;
 }
@@ -9,10 +11,14 @@
 .header {
     position: relative;
     overflow: hidden;
-    height: fit-content;
+    height: 120px;
     color: white;
     background: $banner-gradient-header;
     vertical-align: middle;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
 
     >h1 {
         font-size: 3rem;
@@ -20,27 +26,26 @@
     }
 }
 
-.logo-header{
-    position: absolute;
-    top: 0;
-    right: 0;
+.logo-header {
     width: fit-content;
     height: 100%;
     margin: 0;
-    padding: 0.5rem;
+    padding: 0;
     z-index: 999;
 
-    > img{
-        width: 100%;
+    >img {
+        height: 100%;
         aspect-ratio: 1/1;
     }
 }
 
-.main{
+.main {
     height: fit-content;
+    flex: 1;
+    margin-bottom: 40px;
 }
 
-.sect-izq{
+.sect-izq {
     width: 65%;
     height: fit-content;
     padding-right: 15px;
@@ -62,28 +67,40 @@
     padding: 20px;
 }
 
-.btn-letra{
-    background: $primary;
+.btn-letra {
+    background: $info;
     text-align: center;
     font-size: 110%;
     color: white;
     transition: transform 0.1s;
 
-    &:hover{
+    &:hover {
         transform: translateY(-3px);
-        background: $primary-hover;
+        background: $info-hover;
     }
 
-    &:active{
-        background: $primary-2;
+    &:active {
+        background: $info-2;
         color: white;
     }
 }
 
-.btn-letra-activa{
+.btn-letra-activa {
     background: $success !important;
 
-    &:hover{
+    &:hover {
         background: $success-2 !important;
     }
+}
+
+.footer {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background: #eceaea;
+    border-top: 1px solid #d4d0d0;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
