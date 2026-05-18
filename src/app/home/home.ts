@@ -4,19 +4,20 @@ import { CanvasAnimCirculos } from '@shared/canvas/anim-circulos.canvas';
 import { TablaDatosComponent, TablaColumna } from '@shared/tabla-datos/tabla.component';
 import { SupabaseService } from '@database/supabase.service';
 import { Cliente, Sesion, Tablas } from '@database/tablas.supabase';
+import { ModalNuevoClienteComponent } from '../modals/nuevo-cliente/modal-nuevo-cliente';
 
 @Component({
   selector: 'app-home',
-  imports: [TablaDatosComponent, NgClass, CanvasAnimCirculos],
+  imports: [TablaDatosComponent, NgClass, CanvasAnimCirculos, ModalNuevoClienteComponent],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home implements OnInit {
-  constructor(private supabaseService: SupabaseService){}
+  constructor(private supabaseService: SupabaseService) { }
   // -- CLIENTE
   clientes = signal<Cliente[]>([])
   clientesFiltrados = signal<Cliente[]>([])
-  clienteSeleccionado = signal<Cliente|null>(null)
+  clienteSeleccionado = signal<Cliente | null>(null)
 
   columnasClientes: TablaColumna[] = [
     { field: 'nombre', header: 'Nombre' },
@@ -31,35 +32,36 @@ export class Home implements OnInit {
   sesiones = signal<Sesion[]>([])
 
   columnasSesiones: TablaColumna[] = [
-    {field: 'tratamiento', header:'Tratamiento', width:50},
-    {field: 'notas', header:'Notas', width:50},
+    { field: 'tratamiento', header: 'Tratamiento', width: 50 },
+    { field: 'notas', header: 'Notas', width: 50 },
   ]
 
-  sesionesFiltradas = computed(()=>{
-    if(!this.clienteSeleccionado())
+  sesionesFiltradas = computed(() => {
+    if (!this.clienteSeleccionado())
       return this.sesiones()
-    else{
+    else {
       return this.sesiones().filter(s => s.id_cliente == this.clienteSeleccionado()?.id)
     }
   })
 
-  
+
   // -- OTRAS
   ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
   finishedLoading = signal(false);
   finishedLoading_Sesiones = signal(false);
   errorMsg = signal('');
   filtro_letra = "";
+  showModalNuevoCliente = false;
 
-  async cambiarFiltroLetra(letra:string){
+  async cambiarFiltroLetra(letra: string) {
     this.finishedLoading.set(false)
-    if(this.filtro_letra == letra)
+    if (this.filtro_letra == letra)
       this.filtro_letra = ''
     else
       this.filtro_letra = letra
 
     console.log(`Filtrar por letra -> ${letra} : ${this.filtro_letra} : ${letra == this.filtro_letra}`)
-    this.clientesFiltrados.update(()=>{
+    this.clientesFiltrados.update(() => {
       if (this.filtro_letra != '')
         return this.clientes().filter(c => c.nombre[0].toLowerCase() == letra.toLowerCase())
       else
@@ -76,7 +78,7 @@ export class Home implements OnInit {
     this.cargarTodo()
   }
 
-  async cargarTodo(){
+  async cargarTodo() {
     this.finishedLoading.set(false)
     this.finishedLoading_Sesiones.set(false)
 
@@ -87,7 +89,7 @@ export class Home implements OnInit {
     this.finishedLoading.set(true)
   }
 
-  async cargarClientes(){
+  async cargarClientes() {
     try {
       const data = await this.supabaseService.getAll(Tablas.CLIENTES, "nombre");
       this.clientes.set(data.map((v: any) => new Cliente(v)));
@@ -98,7 +100,7 @@ export class Home implements OnInit {
     }
   }
 
-  async cargarSesiones(){
+  async cargarSesiones() {
     try {
       const data = await this.supabaseService.getAll(Tablas.SESIONES);
       this.sesiones.set(data.map((v: any) => new Sesion(v)));
@@ -107,6 +109,11 @@ export class Home implements OnInit {
       console.error('Error al cargar sesiones:', err.message);
     }
   }
+
+  async onClienteCreado() {
+    await this.cargarClientes();
+  }
+
 }
 
 /**
@@ -114,5 +121,5 @@ export class Home implements OnInit {
  * @param ms milisegundos
  */
 function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
