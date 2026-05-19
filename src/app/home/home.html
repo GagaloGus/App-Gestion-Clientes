@@ -9,19 +9,62 @@
         <canvas-anim-circulos></canvas-anim-circulos>
     </header>
 
-    <div class="main p-4 px-5 d-flex gap-3">
+    <div class="main row">
+        <!-- ── Sección derecha: detalle del cliente ── -->
+        <section class="sect-der col-12 col-md-4 order-md-2">
+            <div class="card">
+                @if (!clienteSeleccionado()) {
+                <div class="card-header"></div>
+                <div class="card-body"></div>
+                <div class="card-footer"></div>
+                } @else {
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="m-0">{{clienteSeleccionado()?.nombreCompleto}}</h5>
+                    <button class="btn-close" (click)="clienteSeleccionado.set(null)"></button>
+                </div>
+                <div class="card-body">
+                    <h5>Teléfono: {{clienteSeleccionado()?.telefono ?? '—'}}</h5>
+                    <h5>Fecha de nacimiento: {{clienteSeleccionado()?.fecha_nacimiento ?? '—'}}</h5>
+                    <h5>Sesiones registradas: <strong>{{sesionesFiltradas().length}}</strong></h5>
+                    <p>{{clienteSeleccionado()?.notas}}</p>
+                    <hr>
+
+                    <!-- Tabla sesiones CON acción eliminar -->
+                    <div class="card">
+                        <div class="card-body px-0 py-1">
+                            <app-tabla [columnas]="columnasSesiones" [datos]="sesionesFiltradas()"
+                                [cargando]="!finishedLoading_Sesiones()" mensajeVacio="No hay ninguna sesión registrada"
+                                [hayAcciones]="true" [acciones]="[{tipo:'eliminar'}]"
+                                confirmarEliminarTexto="¿Eliminar esta sesión?"
+                                (eliminarClick)="eliminarSesion($event)">
+                            </app-tabla>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-info my-1 ms-auto d-flex align-items-center gap-2 fw-semibold"
+                        (click)="showModalNuevaSesion = true">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path
+                                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                        </svg>
+                        Registrar nueva sesión
+                    </button>
+                </div>
+                }
+            </div>
+        </section>
 
         <!-- ── Sección izquierda: lista de clientes ── -->
-        <section class="sect-izq">
+        <section class="sect-izq col-12 col-md-8 order-md-1 mt-4 mt-md-0">
             <h3>Búsqueda de clientes por letra</h3>
             <hr>
             <div class="contenedor-grid p-0">
                 @for (letra of ABECEDARIO; track letra) {
-                    <button class="btn btn-letra fw-bold"
-                        [ngClass]="{'btn-letra-activa': filtro_letra == letra}"
-                        (click)="cambiarFiltroLetra(letra)">
-                        {{letra}}
-                    </button>
+                <button class="btn btn-letra fw-bold" [ngClass]="{'btn-letra-activa': filtro_letra == letra}"
+                    (click)="cambiarFiltroLetra(letra)">
+                    {{letra}}
+                </button>
                 }
             </div>
             <hr>
@@ -29,82 +72,33 @@
                 <div class="sect-izq-filtro d-flex justify-content-between align-items-center mb-2">
                     <p class="m-0">
                         @if (filtro_letra == '') {
-                            Mostrando todos los clientes
+                        Mostrando todos los clientes
                         } @else {
-                            Filtrado por clientes que empiezan por <span class="fw-bolder text-primary">{{filtro_letra}}</span>
+                        Filtrado por clientes que empiezan por <span
+                            class="fw-bolder text-primary">{{filtro_letra}}</span>
                         }
                         <span class="fw-bold"> ({{clientesFiltrados().length}})</span>
                     </p>
                     <button class="btn btn-info fw-semibold d-flex align-items-center gap-2"
                         (click)="showModalNuevoCliente = true">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                            <path
+                                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                         </svg>
                         Nuevo cliente
                     </button>
                 </div>
 
                 <!-- Tabla clientes CON acción eliminar -->
-                <app-tabla
-                    [columnas]="columnasClientes"
-                    [datos]="clientesFiltrados()"
-                    [cargando]="!finishedLoading()"
-                    [clickFila]="true"
-                    [hayAcciones]="true"
-                    [acciones]="[{tipo:'eliminar'}]"
+                <app-tabla [columnas]="columnasClientes" [datos]="clientesFiltrados()" [cargando]="!finishedLoading()"
+                    [clickFila]="true" [hayAcciones]="true" [acciones]="[{tipo:'eliminar'}]"
                     confirmarEliminarTexto="¿Eliminar este cliente? También se eliminarán sus sesiones."
-                    (filaClick)="clienteSeleccionado.set($event)"
-                    (eliminarClick)="eliminarCliente($event)">
+                    (filaClick)="clienteSeleccionado.set($event)" (eliminarClick)="eliminarCliente($event)">
                 </app-tabla>
             </div>
         </section>
 
-        <!-- ── Sección derecha: detalle del cliente ── -->
-        <section class="sect-der pt-3">
-            <div class="card">
-                @if (!clienteSeleccionado()) {
-                    <div class="card-header"></div>
-                    <div class="card-body"></div>
-                    <div class="card-footer"></div>
-                } @else {
-                    <div class="card-header">
-                        <h5 class="m-0">{{clienteSeleccionado()?.nombreCompleto}}</h5>
-                    </div>
-                    <div class="card-body">
-                        <h5>Teléfono: {{clienteSeleccionado()?.telefono ?? '—'}}</h5>
-                        <h5>Fecha de nacimiento: {{clienteSeleccionado()?.fecha_nacimiento ?? '—'}}</h5>
-                        <h5>Sesiones registradas: <strong>{{sesionesFiltradas().length}}</strong></h5>
-                        <p>{{clienteSeleccionado()?.notas}}</p>
-                        <hr>
 
-                        <!-- Tabla sesiones CON acción eliminar -->
-                        <div class="card">
-                            <div class="card-body px-0 py-1">
-                                <app-tabla
-                                    [columnas]="columnasSesiones"
-                                    [datos]="sesionesFiltradas()"
-                                    [cargando]="!finishedLoading_Sesiones()"
-                                    mensajeVacio="No hay ninguna sesión registrada"
-                                    [hayAcciones]="true"
-                                    [acciones]="[{tipo:'eliminar'}]"
-                                    confirmarEliminarTexto="¿Eliminar esta sesión?"
-                                    (eliminarClick)="eliminarSesion($event)">
-                                </app-tabla>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn-info my-1 ms-auto d-flex align-items-center gap-2 fw-semibold"
-                            (click)="showModalNuevaSesion = true">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-                            </svg>
-                            Registrar nueva sesión
-                        </button>
-                    </div>
-                }
-            </div>
-        </section>
     </div>
 
     <footer class="footer">
@@ -114,17 +108,13 @@
 
     <!-- ── Modales ── -->
     @if (showModalNuevoCliente) {
-        <modal-nuevo-cliente
-            (cerrar)="showModalNuevoCliente = false"
-            (clienteCreado)="onClienteCreado()">
-        </modal-nuevo-cliente>
+    <modal-nuevo-cliente (cerrar)="showModalNuevoCliente = false" (clienteCreado)="onClienteCreado()">
+    </modal-nuevo-cliente>
     }
 
     @if (showModalNuevaSesion && clienteSeleccionado()) {
-        <modal-nueva-sesion
-            [idCliente]="clienteSeleccionado()!.id"
-            (cerrar)="showModalNuevaSesion = false"
-            (sesionCreada)="onSesionCreada()">
-        </modal-nueva-sesion>
+    <modal-nueva-sesion [idCliente]="clienteSeleccionado()!.id" (cerrar)="showModalNuevaSesion = false"
+        (sesionCreada)="onSesionCreada()">
+    </modal-nueva-sesion>
     }
 </div>
