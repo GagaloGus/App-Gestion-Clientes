@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Gestion Clientes Alizzia</string>
+    <string name="title_activity_main">Gestion Clientes Alizzia</string>
+    <string name="package_name">com.apptwin.alizzia</string>
+    <string name="custom_url_scheme">com.apptwin.alizzia</string>
+</resources>
