@@ -10,7 +10,8 @@
     "test": "ng test",
     "serve:ssr:app-gestion-clientes": "node dist/app-gestion-clientes/server/server.mjs",
     "electron": "electron .",
-    "build:exe": "ng build & electron-builder"
+    "build:exe": "ng build & electron-builder",
+    "build:android": "node -e \"fs.rmSync('android', { recursive: true, force: true })\" & ng build & npx cap add android"
   },
   "private": true,
   "packageManager": "npm@11.12.1",

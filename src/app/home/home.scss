@@ -21,7 +21,7 @@
 
     > h1 {
         margin: 0;
-        font-size: 7dvh;
+        font-size: min(7dvh, 14dvw);
     }
 }
 
@@ -42,11 +42,10 @@
 .main {
     height: fit-content;
     flex: 1;
-    margin-bottom: 40px;
+    margin: 5dvh;
 }
 
 .sect-izq {
-    width: 65%;
     height: fit-content;
     padding-right: 15px;
 
@@ -56,6 +55,7 @@
 
     &-filtro{
         font-size: 2dvh;
+        gap: 2dvh;
     }
 }
 
@@ -64,8 +64,8 @@
     top: 1rem;
     align-self: flex-start;
     max-height: calc(100dvh - 2rem);
+    z-index: 90;
     overflow-y: auto;
-    width: 35%;
 
     .card {
         h5{
