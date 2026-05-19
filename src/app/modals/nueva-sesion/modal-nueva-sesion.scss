@@ -13,40 +13,35 @@
 .modal-box {
   background: $surface;
   border-radius: 14px;
-  width: min(660px, 95vw);
+  width: min(520px, 92dvw);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   animation: modal-in 0.18s ease;
+
+  button{
+    display: flex;
+    align-items: center;
+  }
 }
 
 @keyframes modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modal-cabecera {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid $border;
-  background: $surface;
   padding: 2.5dvh 2dvh;
   border-bottom: 1px solid $border;
-
-  h5 {
+  > h5{
     font-size: 2.7dvh;
   }
 
-  >.btn-close {
+  >.btn-close{
     font-size: 2.5dvh !important;
     height: 2.5dvh !important;
   }
@@ -68,24 +63,14 @@
   background: $surface-2;
 }
 
-// ── Campos del formulario
 .campo-grupo {
   display: flex;
   flex-direction: column;
+  gap: 0.3rem;
   font-size: 2dvh;
 
-  input,
-  textarea {
+  input, textarea{
     font-size: 2dvh;
-  }
-}
-
-.campo-fila {
-  display: flex;
-  gap: 1rem;
-
-  .campo-grupo {
-    flex: 1;
   }
 }
 

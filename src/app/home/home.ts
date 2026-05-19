@@ -5,16 +5,18 @@ import { TablaDatosComponent, TablaColumna } from '@shared/tabla-datos/tabla.com
 import { SupabaseService } from '@database/supabase.service';
 import { Cliente, Sesion, Tablas } from '@database/tablas.supabase';
 import { ModalNuevoClienteComponent } from '../modals/nuevo-cliente/modal-nuevo-cliente';
+import { ModalNuevaSesionComponent } from '../modals/nueva-sesion/modal-nueva-sesion';
 
 @Component({
   selector: 'app-home',
-  imports: [TablaDatosComponent, NgClass, CanvasAnimCirculos, ModalNuevoClienteComponent],
+  imports: [TablaDatosComponent, NgClass, CanvasAnimCirculos, ModalNuevoClienteComponent, ModalNuevaSesionComponent],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home implements OnInit {
   constructor(private supabaseService: SupabaseService) { }
-  // -- CLIENTE
+
+  // ── CLIENTES
   clientes = signal<Cliente[]>([])
   clientesFiltrados = signal<Cliente[]>([])
   clienteSeleccionado = signal<Cliente | null>(null)
@@ -25,10 +27,9 @@ export class Home implements OnInit {
     { field: 'apellido2', header: '2do apellido' },
     { field: 'telefono', header: 'Teléfono' },
     { field: 'fecha_nacimiento', header: 'Fecha de Nacimiento' },
-
   ]
 
-  // -- SESIONES
+  // ── SESIONES
   sesiones = signal<Sesion[]>([])
 
   columnasSesiones: TablaColumna[] = [
@@ -39,40 +40,20 @@ export class Home implements OnInit {
   sesionesFiltradas = computed(() => {
     if (!this.clienteSeleccionado())
       return this.sesiones()
-    else {
+    else
       return this.sesiones().filter(s => s.id_cliente == this.clienteSeleccionado()?.id)
-    }
   })
 
+  // ── MODALS
+  showModalNuevoCliente = false;
+  showModalNuevaSesion = false;
 
-  // -- OTRAS
+  // ── OTRAS
   ABECEDARIO = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
   finishedLoading = signal(false);
   finishedLoading_Sesiones = signal(false);
   errorMsg = signal('');
   filtro_letra = "";
-  showModalNuevoCliente = false;
-
-  async cambiarFiltroLetra(letra: string) {
-    this.finishedLoading.set(false)
-    if (this.filtro_letra == letra)
-      this.filtro_letra = ''
-    else
-      this.filtro_letra = letra
-
-    console.log(`Filtrar por letra -> ${letra} : ${this.filtro_letra} : ${letra == this.filtro_letra}`)
-    this.clientesFiltrados.update(() => {
-      if (this.filtro_letra != '')
-        return this.clientes().filter(c => c.nombre[0].toLowerCase() == letra.toLowerCase())
-      else
-        return this.clientes()
-    }
-
-    )
-    await delay(50)
-    this.finishedLoading.set(true)
-  }
-
 
   ngOnInit(): void {
     this.cargarTodo()
@@ -81,11 +62,9 @@ export class Home implements OnInit {
   async cargarTodo() {
     this.finishedLoading.set(false)
     this.finishedLoading_Sesiones.set(false)
-
     await this.cargarClientes()
     await this.cargarSesiones()
     this.finishedLoading_Sesiones.set(true)
-
     this.finishedLoading.set(true)
   }
 
@@ -93,10 +72,15 @@ export class Home implements OnInit {
     try {
       const data = await this.supabaseService.getAll(Tablas.CLIENTES, "nombre");
       this.clientes.set(data.map((v: any) => new Cliente(v)));
-      this.clientesFiltrados.set(this.clientes())
+
+      // Respetar el filtro activo en lugar de resetear siempre al total
+      this.clientesFiltrados.set(
+        this.filtro_letra !== ''
+          ? this.clientes().filter(c => c.nombre[0].toLowerCase() === this.filtro_letra.toLowerCase())
+          : this.clientes()
+      );
     } catch (err: any) {
       this.errorMsg.set('Error al cargar clientes: ' + err.message);
-      console.error('Error al cargar clientes:', err.message);
     }
   }
 
@@ -106,20 +90,53 @@ export class Home implements OnInit {
       this.sesiones.set(data.map((v: any) => new Sesion(v)));
     } catch (err: any) {
       this.errorMsg.set('Error al cargar sesiones: ' + err.message);
-      console.error('Error al cargar sesiones:', err.message);
     }
   }
 
+  async cambiarFiltroLetra(letra: string) {
+    this.finishedLoading.set(false)
+    this.filtro_letra = this.filtro_letra === letra ? '' : letra
+    this.clientesFiltrados.update(() =>
+      this.filtro_letra !== ''
+        ? this.clientes().filter(c => c.nombre[0].toLowerCase() === letra.toLowerCase())
+        : this.clientes()
+    )
+    await delay(50)
+    this.finishedLoading.set(true)
+  }
+
+  // ── Callbacks de modales
   async onClienteCreado() {
     await this.cargarClientes();
   }
 
+  async onSesionCreada() {
+    await this.cargarSesiones();
+  }
+
+  // ── Eliminar cliente
+  async eliminarCliente(cliente: Cliente) {
+    try {
+      await this.supabaseService.deleteRow(Tablas.CLIENTES, 'id', cliente.id);
+      if (this.clienteSeleccionado()?.id === cliente.id)
+        this.clienteSeleccionado.set(null);
+      await this.cargarClientes();
+    } catch (err: any) {
+      this.errorMsg.set('Error al eliminar cliente: ' + err.message);
+    }
+  }
+
+  // ── Eliminar sesion
+  async eliminarSesion(sesion: Sesion) {
+    try {
+      await this.supabaseService.deleteRow(Tablas.SESIONES, 'id', sesion.id);
+      await this.cargarSesiones();
+    } catch (err: any) {
+      this.errorMsg.set('Error al eliminar sesión: ' + err.message);
+    }
+  }
 }
 
-/**
- * En funciones ASYNC detiene durante x milisegundos el flujo de la funcion
- * @param ms milisegundos
- */
 function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

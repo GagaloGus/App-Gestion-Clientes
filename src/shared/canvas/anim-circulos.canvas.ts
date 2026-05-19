@@ -40,8 +40,8 @@ export class CanvasAnimCirculos implements AfterViewInit, OnDestroy {
       circles.push({
         x: startX,
         y: rand(canvas.height * 0.1, canvas.height * 0.9),
-        r: rand(this.RADIUS.min, this.RADIUS.max),
-        speed: rand(this.SPEED.min, this.SPEED.max),
+        r: rand(this.RADIUS.min, this.RADIUS.max) * (canvas.height / 150),
+        speed: rand(this.SPEED.min, this.SPEED.max) * (canvas.width / rand(1200,1500)),
         opacity: rand(this.START_OPACITY.min, this.START_OPACITY.max),
         startX: randomX ? canvas.width : startX,
         limitX,

@@ -25,21 +25,20 @@
         @if (cargando) {
           <tr>
             <td [attr.colspan]="columnas.length + 1" class="loading-icono pt-4">
-                <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="30" cy="30" r="22" fill="none" stroke="#dee2e6" stroke-width="4" stroke-linecap="round" />
-                    <g>
-                        <circle cx="30" cy="30" r="22" fill="none" stroke="#0d6efd" stroke-width="4" stroke-linecap="round" stroke-dasharray="35 105" />
-                    </g>
-                </svg>
-                <p class="mt-2">Obteniendo datos...</p>
+              <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="22" fill="none" stroke="#dee2e6" stroke-width="4" stroke-linecap="round"/>
+                <g>
+                  <circle cx="30" cy="30" r="22" fill="none" stroke="#0d6efd" stroke-width="4" stroke-linecap="round" stroke-dasharray="35 105"/>
+                </g>
+              </svg>
+              <p class="mt-2">Obteniendo datos...</p>
             </td>
           </tr>
         } @else if (datosSorted.length === 0) {
           <tr>
             <td [attr.colspan]="columnas.length + 1" class="text-center py-4 text-secondary">
               <svg viewBox="0 0 16 16" width="32" height="32" fill="currentColor" class="mb-2 d-block mx-auto opacity-50">
-                <path
-                  d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5" />
+                <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5"/>
               </svg>
               {{ mensajeVacio }}
             </td>
@@ -51,9 +50,10 @@
               (click)="onFilaClick(row)">
 
               @for (col of columnas; track col.field) {
-                <td [style.white-space]="col.nowrap ? 'nowrap' : 'normal'" [style.width]="col.width ? col.width+'%' : null">
+                <td
+                  [style.white-space]="col.nowrap ? 'nowrap' : 'normal'"
+                  [style.width]="col.width ? col.width + '%' : null">
                   @if (cellTemplates[col.field]) {
-                    <!-- Template personalizado para esta celda -->
                     <ng-container
                       [ngTemplateOutlet]="cellTemplates[col.field]"
                       [ngTemplateOutletContext]="{ $implicit: row }">
@@ -90,7 +90,7 @@
 
                       @if (accion.tipo === 'eliminar') {
                         <button class="btn btn-sm btn-accion-delete" title="Eliminar"
-                          (click)="eliminarClick.emit(row)">
+                          (click)="pedirConfirmacion(row)">
                           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>

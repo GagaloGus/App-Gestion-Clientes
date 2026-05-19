@@ -1,6 +1,6 @@
 {
   "name": "app-gestion-clientes",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
@@ -43,12 +43,13 @@
     "vitest": "^4.0.8"
   },
   "build": {
-    "appId": "com.towapp.tfg",
+    "appId": "com.apptwin.alizzia",
     "directories": {
       "output": "dist-electron"
     },
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "icon":"public/img/logo_alizzia.ico"
     },
     "files": [
       "dist/**/*",

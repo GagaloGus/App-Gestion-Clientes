@@ -1,0 +1,54 @@
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="modal-box">
+
+    <div class="modal-cabecera">
+      <h5 class="m-0 fw-bold">📋 Registrar nueva sesión</h5>
+      <button class="btn-close" (click)="cerrar.emit()"></button>
+    </div>
+
+    <div class="modal-cuerpo">
+
+      <!-- Tratamiento -->
+      <div class="campo-grupo">
+        <label class="campo-label">Tratamiento <span class="text-danger">*</span></label>
+        <input class="form-control" [class.is-invalid]="errores['tratamiento']"
+          type="text" [(ngModel)]="formData.tratamiento"
+          placeholder="Ej: Masaje relajante, Limpieza facial...">
+        @if (errores['tratamiento']) {
+          <div class="invalid-feedback">{{ errores['tratamiento'] }}</div>
+        }
+      </div>
+
+      <!-- Notas -->
+      <div class="campo-grupo">
+        <label class="campo-label">Notas</label>
+        <textarea class="form-control" rows="4"
+          [(ngModel)]="formData.notas"
+          placeholder="Observaciones sobre la sesión, reacciones, próximos pasos..."></textarea>
+      </div>
+
+      @if (errorMsg()) {
+        <div class="alert alert-danger py-2 mb-0">{{ errorMsg() }}</div>
+      }
+      @if (successMsg()) {
+        <div class="alert alert-success py-2 mb-0">{{ successMsg() }}</div>
+      }
+
+    </div>
+
+    <div class="modal-pie">
+      <button class="btn btn-outline-secondary" (click)="cerrar.emit()" [disabled]="enviando()">
+        Cancelar
+      </button>
+      <button class="btn btn-info d-flex align-items-center gap-2"
+        (click)="guardar()" [disabled]="enviando()">
+        @if (enviando()) {
+          <span class="spinner-border spinner-border-sm"></span>
+          Guardando...
+        } @else {
+          Guardar sesión
+        }
+      </button>
+    </div>
+  </div>
+</div>

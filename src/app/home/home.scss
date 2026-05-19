@@ -1,7 +1,7 @@
 @use '../../styles/variables' as *;
 
 .page-container {
-    min-height: 100vh;
+    min-height: 101vh;
     display: flex;
     flex-direction: column;
     height: fit-content;
@@ -11,27 +11,27 @@
 .header {
     position: relative;
     overflow: hidden;
-    height: 120px;
+    height: 18dvh;
+    padding: 2dvh;
     color: white;
     background: $banner-gradient-header;
-    vertical-align: middle;
     display: flex;
-    gap: 1rem;
+    gap: 2dvh;
     align-items: center;
-    padding: 1rem;
 
-    >h1 {
-        font-size: 3rem;
+    > h1 {
         margin: 0;
+        font-size: 7dvh;
     }
 }
 
 .logo-header {
     width: fit-content;
     height: 100%;
+    flex-shrink: 0;
     margin: 0;
     padding: 0;
-    z-index: 999;
+    z-index: 50;
 
     >img {
         height: 100%;
@@ -49,30 +49,50 @@
     width: 65%;
     height: fit-content;
     padding-right: 15px;
+
+    > h3{
+        font-size: 3dvh
+    }
+
+    &-filtro{
+        font-size: 2dvh;
+    }
 }
 
 .sect-der {
     position: sticky;
     top: 1rem;
     align-self: flex-start;
-    max-height: calc(100vh - 1rem);
+    max-height: calc(100dvh - 2rem);
     overflow-y: auto;
     width: 35%;
+
+    .card {
+        h5{
+            font-size: 3dvh !important
+        }
+        p{
+
+            font-size: 2dvh !important
+        }
+    }
 }
 
 .contenedor-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(6%, 1fr));
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(5dvh, 1fr));
+    gap: clamp(0.35rem, 1vw, 0.65rem);
+    padding: 0.5rem 0;
 }
 
 .btn-letra {
+    height: fit-content;
     background: $info;
     text-align: center;
-    font-size: 110%;
+    font-size: 2.7dvh !important;
     color: white;
     transition: transform 0.1s;
+    padding: 0.35rem 0.25rem;
 
     &:hover {
         transform: translateY(-3px);
@@ -97,10 +117,12 @@
     position: sticky;
     bottom: 0;
     width: 100%;
-    padding: 10px;
+    padding: 0.5rem 1rem;
+    height: 4dvh;
     background: #eceaea;
     border-top: 1px solid #d4d0d0;
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     align-items: center;
+    font-size: 2dvh;
 }
