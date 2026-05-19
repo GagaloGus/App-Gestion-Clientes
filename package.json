@@ -11,7 +11,8 @@
     "serve:ssr:app-gestion-clientes": "node dist/app-gestion-clientes/server/server.mjs",
     "electron": "electron .",
     "build:exe": "ng build & electron-builder",
-    "build:android": "node -e \"fs.rmSync('android', { recursive: true, force: true })\" & ng build & npx cap add android"
+    "build:android": "node -e \"fs.rmSync('android', { recursive: true, force: true })\" & ng build & npx cap add android",
+    "build:ios": "node -e \"fs.rmSync('android', { recursive: true, force: true })\" & ng build & npx cap add ios"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
@@ -26,6 +27,7 @@
     "@angular/ssr": "^21.2.1",
     "@capacitor/android": "^8.3.4",
     "@capacitor/core": "^8.3.4",
+    "@capacitor/ios": "^8.3.4",
     "@supabase/supabase-js": "^2.99.1",
     "bootstrap": "^5.3.8",
     "express": "^5.1.0",
