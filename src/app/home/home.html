@@ -5,19 +5,15 @@
                 src="https://letnkezlkfwqvcthwaxf.supabase.co/storage/v1/object/public/imagenes/logo_alizzia.png"
                 alt="Logo alizzia">
         </figure>
-        <h1 class="display-1">Gestión de clientes <span class="fw-semibold fst-italic text-decoration-underline d-sm-none">Alizzia.</span></h1>
+        <h1 class="display-1 text-center text-sm-left">Gestión de clientes <span class="fw-semibold fst-italic text-decoration-underline d-sm-none">Alizzia.</span></h1>
         <canvas-anim-circulos></canvas-anim-circulos>
     </header>
 
     <div class="main row">
         <!-- ── Sección derecha: detalle del cliente ── -->
         <section class="sect-der col-12 col-md-4 order-md-2">
+            @if (clienteSeleccionado()) {
             <div class="card">
-                @if (!clienteSeleccionado()) {
-                <div class="card-header"></div>
-                <div class="card-body"></div>
-                <div class="card-footer"></div>
-                } @else {
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="m-0">{{clienteSeleccionado()?.nombreCompleto}}</h5>
                     <button class="btn-close" (click)="clienteSeleccionado.set(null)"></button>
@@ -51,8 +47,8 @@
                         Registrar nueva sesión
                     </button>
                 </div>
-                }
             </div>
+        }
         </section>
 
         <!-- ── Sección izquierda: lista de clientes ── -->
