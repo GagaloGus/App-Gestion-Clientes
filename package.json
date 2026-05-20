@@ -1,6 +1,6 @@
 {
   "name": "app-gestion-clientes",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
@@ -12,7 +12,9 @@
     "electron": "electron .",
     "build:exe": "ng build & electron-builder",
     "build:android": "node -e \"fs.rmSync('android', { recursive: true, force: true })\" & ng build & npx cap add android",
-    "build:ios": "node -e \"fs.rmSync('android', { recursive: true, force: true })\" & ng build & npx cap add ios"
+    "build:ios": "node -e \"fs.rmSync('ios', { recursive: true, force: true })\" & ng build & npx cap add ios",
+    "build:phone": "node -e \"fs.rmSync('android', { recursive: true, force: true })\" & node -e \"fs.rmSync('ios', { recursive: true, force: true })\" & ng build & npx cap add android & npx cap add ios"
+
   },
   "private": true,
   "packageManager": "npm@11.12.1",
